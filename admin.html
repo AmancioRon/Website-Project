@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - SynapseSparks</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Admin Login -->
+    <div id="admin-login" class="admin-login">
+        <div class="login-form">
+            <h2>Admin Login</h2>
+            <input type="password" id="admin-password" placeholder="Enter Admin Password" class="login-input">
+            <button onclick="login()" class="btn btn-primary">Login</button>
+            <p id="login-error" class="error-message"></p>
+        </div>
+    </div>
+
+    <!-- Admin Panel (hidden until login) -->
+    <div id="admin-panel" class="admin-panel" style="display: none;">
+        <header class="main-header">
+            <nav class="nav-container">
+                <div class="logo">
+                    <a href="index.html">
+                        <div class="logo-icon">⚡</div>
+                        <span>SYNAPSE<span>SPARKS</span></span>
+                    </a>
+                </div>
+                
+                <div class="nav-links">
+                    <a href="index.html" class="nav-link">Back to Store</a>
+                    <button onclick="logout()" class="btn btn-secondary">Logout</button>
+                </div>
+            </nav>
+        </header>
+
+        <section class="admin-section">
+            <div class="container">
+                <h1 class="section-title">Admin Panel</h1>
+                
+                <div class="admin-tabs">
+                    <button class="tab-btn active" onclick="openTab('inventory')">Inventory</button>
+                    <button class="tab-btn" onclick="openTab('orders')">Orders</button>
+                    <button class="tab-btn" onclick="openTab('add-product')">Add Product</button>
+                </div>
+
+                <!-- Inventory Tab -->
+                <div id="inventory" class="tab-content active">
+                    <h3>Product Inventory</h3>
+                    <div class="inventory-grid" id="inventory-grid">
+                        <!-- Inventory items loaded by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Orders Tab -->
+                <div id="orders" class="tab-content">
+                    <h3>Recent Orders</h3>
+                    <div class="orders-list" id="orders-list">
+                        <!-- Orders will be listed here -->
+                    </div>
+                </div>
+
+                <!-- Add Product Tab -->
+                <div id="add-product" class="tab-content">
+                    <h3>Add New Product</h3>
+                    <form class="product-form" onsubmit="addProduct(event)">
+                        <input type="text" id="product-name" placeholder="Product Name" required>
+                        <input type="number" id="product-price" placeholder="Price" step="0.01" required>
+                        <select id="product-category" required>
+                            <option value="">Select Category</option>
+                            <option value="cpus">CPUs</option>
+                            <option value="motherboards">Motherboards</option>
+                            <option value="ram">RAM</option>
+                            <option value="gpus">GPUs</option>
+                            <option value="storage">Storage</option>
+                            <option value="psus">Power Supplies</option>
+                            <option value="cases">Cases</option>
+                            <option value="monitors">Monitors</option>
+                            <option value="peripherals">Peripherals</option>
+                        </select>
+                        <textarea id="product-specs" placeholder="Specifications" required></textarea>
+                        <input type="text" id="product-image" placeholder="Image Emoji" value="📦">
+                        <button type="submit" class="btn btn-primary">Add Product</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>

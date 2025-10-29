@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SynapseSparks - Future Tech Store</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-content">
+            <div class="logo-pulse">
+                <div class="circuit-board">
+                    <div class="node"></div>
+                    <div class="node"></div>
+                    <div class="node"></div>
+                    <div class="node"></div>
+                </div>
+                <h1>SYNAPSE<span>SPARKS</span></h1>
+            </div>
+            <p>Igniting Your Digital Future</p>
+            <div class="loading-bar">
+                <div class="loading-progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="main-header">
+        <nav class="nav-container">
+            <div class="logo">
+                <a href="index.html">
+                    <div class="logo-icon">⚡</div>
+                    <span>SYNAPSE<span>SPARKS</span></span>
+                </a>
+            </div>
+            
+            <div class="nav-links">
+    <a href="index.html" class="nav-link">Home</a>
+    <div class="nav-dropdown">
+        <a href="#" class="nav-link">Categories ▾</a>
+        <div class="dropdown-menu">
+            <a href="#" class="dropdown-category" data-category="motherboards">Motherboards</a>
+            <a href="#" class="dropdown-category" data-category="prebuilts">Prebuilt PCs</a>
+            <a href="#" class="dropdown-category" data-category="laptops">Laptops</a>
+            <a href="#" class="dropdown-category" data-category="components">Components</a>
+            <a href="#" class="dropdown-category" data-category="peripherals">Peripherals</a>
+        </div>
+    </div>
+    <a href="build-pc.html" class="nav-link highlight">Build Your PC</a>
+    <a href="cart.html" class="nav-link cart-link">
+        Cart <span id="cart-count">0</span>
+    </a>
+    <a href="admin.html" class="admin-link" title="Admin Panel">⚙️</a>
+</div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+<section class="hero">
+    <div class="hero-content">
+        <div class="hero-text">
+            <h1 class="glitch-text" data-text="WELCOME TO SYNAPSE SPARKS">WELCOME TO SYNAPSE SPARKS</h1>
+            <p class="hero-description">Where cutting-edge technology meets limitless possibilities. Build, create, and transform your digital experience with our premium components and systems.</p>
+            <div class="hero-buttons">
+                <a href="build-pc.html" class="btn btn-primary">Start Building</a>
+                <a href="#categories" class="btn btn-secondary explore-products-btn">Explore Products</a>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="floating-components">
+                <div class="component cpu" data-tooltip="Latest CPUs">💠</div>
+                <div class="component gpu" data-tooltip="Powerful GPUs">🔷</div>
+                <div class="component mb" data-tooltip="Motherboards">🔲</div>
+                <div class="component ram" data-tooltip="High-Speed RAM">💾</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+    <!-- Categories Section -->
+    <section id="categories" class="categories">
+        <h2 class="section-title">Explore Categories</h2>
+        <div class="category-grid">
+            <div class="category-card" data-category="motherboards">
+                <div class="category-icon">🔌</div>
+                <h3>Motherboards</h3>
+                <p>Foundation of your build</p>
+                <div class="category-hover"></div>
+            </div>
+            <div class="category-card" data-category="prebuilts">
+                <div class="category-icon">💻</div>
+                <h3>Prebuilt Systems</h3>
+                <p>Ready-to-use power</p>
+                <div class="category-hover"></div>
+            </div>
+            <div class="category-card" data-category="laptops">
+                <div class="category-icon">📱</div>
+                <h3>Laptops</h3>
+                <p>Portable performance</p>
+                <div class="category-hover"></div>
+            </div>
+            <div class="category-card" data-category="components">
+                <div class="category-icon">⚙️</div>
+                <h3>Components</h3>
+                <p>CPU, GPU, RAM, Storage</p>
+                <div class="category-hover"></div>
+            </div>
+            <div class="category-card" data-category="peripherals">
+                <div class="category-icon">🎮</div>
+                <h3>Peripherals</h3>
+                <p>Mice, Keyboards, Monitors</p>
+                <div class="category-hover"></div>
+            </div>
+            <div class="category-card highlight" data-category="builder">
+                <div class="category-icon">🔨</div>
+                <h3>PC Builder</h3>
+                <p>Custom build your dream PC</p>
+                <div class="category-hover"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="featured-products">
+        <h2 class="section-title">Featured Components</h2>
+        <div class="products-grid" id="featured-products">
+            <!-- Products loaded by JavaScript -->
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <div class="logo">
+                    <div class="logo-icon">⚡</div>
+                    <span>SYNAPSE<span>SPARKS</span></span>
+                </div>
+                <p>Building the future, one component at a time.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Contact Us</h4>
+                <a href="https://www.facebook.com/profile.php?id=61582661370168" class="footer-link">Facebook Page</a>
+                <p>Email: contact@synapsesparks.com</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 SynapseSparks. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="products-data.js"></script>
+    <script src="script.js"></script>
+</body>
+<!-- Category Products Modal -->
+<div id="category-modal" class="modal">
+    <div class="modal-content category-modal-content">
+        <span class="close" onclick="closeCategoryModal()" title="Close">&times;</span>
+        <h2 id="modal-category-title">Category Products</h2>
+        <div class="category-products-grid" id="category-products-grid">
+            <!-- Products will be loaded here -->
+        </div>
+    </div>
+</div>
+
+</html>

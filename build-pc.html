@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Build Your PC - SynapseSparks</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="main-header">
+        <nav class="nav-container">
+            <div class="logo">
+                <a href="index.html">
+                    <div class="logo-icon">⚡</div>
+                    <span>SYNAPSE<span>SPARKS</span></span>
+                </a>
+            </div>
+            
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="build-pc.html" class="nav-link highlight">Build Your PC</a>
+                <a href="cart.html" class="nav-link cart-link">
+                    Cart <span id="cart-count">0</span>
+                </a>
+                <a href="admin.html" class="admin-link" title="Admin Panel">⚙️</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- PC Builder Section -->
+    <section class="pc-builder">
+        <div class="container">
+            <h1 class="section-title">Build Your Dream PC</h1>
+            <p class="builder-description">Select components and build your custom PC. Check compatibility and get real-time pricing.</p>
+
+            <div class="builder-layout">
+                <!-- Component Selection -->
+                <div class="component-selection">
+                    <div class="component-category">
+                        <h3>CPU</h3>
+                        <select id="cpu-select" class="component-select" onchange="updateComponent('cpu', this.value)">
+                            <option value="">Select a CPU</option>
+                            <!-- Options populated by JavaScript -->
+                        </select>
+                    </div>
+
+                    <div class="component-category">
+                        <h3>Motherboard</h3>
+                        <select id="motherboard-select" class="component-select" onchange="updateComponent('motherboard', this.value)">
+                            <option value="">Select a Motherboard</option>
+                        </select>
+                    </div>
+
+                    <div class="component-category">
+                        <h3>RAM</h3>
+                        <select id="ram-select" class="component-select" onchange="updateComponent('ram', this.value)">
+                            <option value="">Select RAM</option>
+                        </select>
+                    </div>
+
+                    <div class="component-category">
+                        <h3>GPU</h3>
+                        <select id="gpu-select" class="component-select" onchange="updateComponent('gpu', this.value)">
+                            <option value="">Select a GPU</option>
+                        </select>
+                    </div>
+
+                    <div class="component-category">
+                        <h3>Storage</h3>
+                        <select id="storage-select" class="component-select" onchange="updateComponent('storage', this.value)">
+                            <option value="">Select Storage</option>
+                        </select>
+                    </div>
+
+                    <div class="component-category">
+                        <h3>Power Supply</h3>
+                        <select id="psu-select" class="component-select" onchange="updateComponent('psu', this.value)">
+                            <option value="">Select a PSU</option>
+                        </select>
+                    </div>
+
+                    <div class="component-category">
+                        <h3>Case</h3>
+                        <select id="case-select" class="component-select" onchange="updateComponent('case', this.value)">
+                            <option value="">Select a Case</option>
+                        </select>
+                    </div>
+
+                    <div class="builder-actions">
+                        <button class="btn btn-primary" onclick="checkCompatibility()">Check Compatibility</button>
+                        <button class="btn btn-secondary" onclick="addPcToCart()">Add Complete PC to Cart</button>
+                    </div>
+                </div>
+
+                <!-- Summary and Compatibility -->
+                <div class="build-summary">
+                    <h3>Your Build</h3>
+                    <div class="summary-list" id="summary-list">
+                        <!-- Components will be listed here -->
+                    </div>
+                    <div class="total-price">
+                        Total: $<span id="total-price">0.00</span>
+                    </div>
+
+                    <div class="compatibility-check">
+                        <h3>Compatibility Check</h3>
+                        <div id="compatibility-results">
+                            <!-- Compatibility results will be shown here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="products-data.js"></script>
+    <script src="pc-builder.js"></script>
+    <script>
+        // Update cart count
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const cartCount = document.getElementById('cart-count');
+            if (cartCount) {
+                cartCount.textContent = cart.length;
+            }
+        }
+        updateCartCount();
+    </script>
+</body>
+</html>
