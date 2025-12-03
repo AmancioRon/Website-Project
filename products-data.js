@@ -1,4 +1,4 @@
-// COMPREHENSIVE PRODUCTS DATABASE - PHILIPPINE PRICES & REAL PRODUCTS
+
 const products = {
     motherboards: [
         {
@@ -1176,7 +1176,7 @@ const products = {
     ]
 };
 
-// COMPATIBILITY RULES
+
 const compatibilityRules = {
     sockets: {
         'AM5': ['AM5'],
@@ -1197,10 +1197,10 @@ const compatibilityRules = {
     }
 };
 
-// GET FEATURED PRODUCTS FOR HOMEPAGE
+
 function getFeaturedProducts() {
     const featured = [];
-    // Take 3 prebuilts and 3 laptops
+
     featured.push(...products.prebuilts.slice(0, 3));
     featured.push(...products.laptops.slice(0, 3));
     return featured;

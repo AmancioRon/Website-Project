@@ -1615,7 +1615,7 @@ body {
     border-radius: 3px;
 }
 
-/* Mobile responsive for hover */
+
 @media (max-width: 1100px) {
     .hover-details-panel.hover-right,
     .hover-details-panel.hover-left {
@@ -1636,7 +1636,7 @@ body {
     }
 }
 
-/* Loading and Error States */
+
 .loading-message {
     text-align: center;
     padding: 3rem;
@@ -1654,20 +1654,20 @@ body {
     grid-column: 1 / -1;
 }
 
-/* Ensure modal product cards animate properly */
+
 .modal-product-card.fade-in-up {
     opacity: 0;
     transform: translateY(30px);
     animation: fadeInUp 0.5s ease forwards;
 }
 
-/* Price formatting */
+
 .price-formatted {
     font-family: 'Orbitron', monospace;
     letter-spacing: 1px;
 }
 
-/* Button fixes */
+
 .hero-buttons a.btn {
     display: inline-block;
     text-decoration: none;
@@ -1680,21 +1680,20 @@ body {
     pointer-events: auto;
 }
 
-/* Ensure buttons are clickable */
+
 .btn, button {
     cursor: pointer;
     pointer-events: auto;
     user-select: none;
 }
 
-/* Fix for disabled state */
-.btn:disabled,
+
 button:disabled {
     cursor: not-allowed;
     opacity: 0.6;
 }
 
-/* Fix for anchor tags that should look like buttons */
+
 a.btn {
     display: inline-flex;
     align-items: center;
@@ -1702,7 +1701,7 @@ a.btn {
     text-decoration: none;
 }
 
-/* Ensure hero buttons work */
+
 .hero-buttons {
     display: flex;
     gap: 1rem;
@@ -1712,9 +1711,7 @@ a.btn {
 .hero-buttons a {
     pointer-events: auto;
 }
-/* ... (ALL THE PREVIOUS CSS CODE FROM ABOVE STAYS THE SAME) ... */
 
-/* Admin Panel Enhancements - ADD THIS SECTION */
 .admin-tabs {
     display: flex;
     gap: 0.5rem;
@@ -1925,7 +1922,7 @@ a.btn {
     margin-top: 1.5rem;
 }
 
-/* Orders styling */
+
 .orders-header {
     display: flex;
     justify-content: space-between;
@@ -1970,7 +1967,7 @@ a.btn {
     font-size: 1.1rem;
 }
 
-/* Statistics */
+
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -1996,7 +1993,7 @@ a.btn {
     border-radius: 3px;
 }
 
-/* Image preview modal */
+
 .image-preview-modal .modal-content {
     max-width: 600px;
 }
@@ -2017,7 +2014,7 @@ a.btn {
     word-break: break-all;
 }
 
-/* Order details modal */
+
 .order-details-modal .modal-content {
     max-width: 600px;
 }
@@ -2044,7 +2041,7 @@ a.btn {
     border-bottom: none;
 }
 
-/* Admin buttons */
+
 .btn-success {
     background: var(--accent);
     color: var(--dark);
@@ -2056,7 +2053,6 @@ a.btn {
     box-shadow: var(--glow-accent);
 }
 
-/* Responsive for admin */
 @media (max-width: 768px) {
     .inventory-item {
         flex-direction: column;

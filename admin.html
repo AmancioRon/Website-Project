@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Admin Login -->
+
     <div id="admin-login" class="admin-login">
         <div class="login-form">
             <h2>Admin Login</h2>
@@ -18,7 +18,7 @@
         </div>
     </div>
 
-    <!-- Admin Panel (hidden until login) -->
+
     <div id="admin-panel" class="admin-panel" style="display: none;">
         <header class="main-header">
             <nav class="nav-container">
@@ -47,7 +47,7 @@
                     <button class="tab-btn" onclick="openTab('stats')">Statistics</button>
                 </div>
 
-                <!-- Inventory Tab -->
+        
                 <div id="inventory" class="tab-content active">
                     <h3>Product Inventory</h3>
                     <div class="inventory-stats">
@@ -83,11 +83,11 @@
                         </select>
                     </div>
                     <div class="inventory-grid" id="inventory-grid">
-                        <!-- Inventory items loaded by JavaScript -->
+                 
                     </div>
                 </div>
 
-                <!-- Orders Tab -->
+  
                 <div id="orders" class="tab-content">
                     <h3>Recent Orders</h3>
                     <div class="orders-header">
@@ -95,11 +95,11 @@
                         <button onclick="clearOrders()" class="btn btn-small btn-danger">Clear All Orders</button>
                     </div>
                     <div class="orders-list" id="orders-list">
-                        <!-- Orders will be listed here -->
+                     
                     </div>
                 </div>
 
-                <!-- Add Product Tab -->
+           
                 <div id="add-product" class="tab-content">
                     <h3>Add New Product</h3>
                     <form class="product-form" onsubmit="addProduct(event)">
@@ -130,7 +130,7 @@
                         </div>
                         
                         <div id="spec-fields">
-                            <!-- Dynamic specification fields will appear here -->
+                      
                         </div>
                         
                         <textarea id="product-specs" placeholder="Main Specifications (comma separated)" required></textarea>
@@ -142,20 +142,20 @@
                     </form>
                 </div>
 
-                <!-- Statistics Tab -->
+   
                 <div id="stats" class="tab-content">
                     <h3>Store Statistics</h3>
                     <div class="stats-grid">
                         <div class="stat-card large">
                             <h4>Inventory Summary</h4>
                             <div class="category-breakdown" id="category-breakdown">
-                                <!-- Category breakdown will be loaded here -->
+         
                             </div>
                         </div>
                         <div class="stat-card large">
                             <h4>Top Products by Price</h4>
                             <div class="top-products" id="top-products">
-                                <!-- Top products will be loaded here -->
+              
                             </div>
                         </div>
                     </div>

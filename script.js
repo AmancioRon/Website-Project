@@ -1,6 +1,4 @@
-// Main JavaScript for SynapseSparks
 
-// Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM loaded, initializing app...');
     initializeApp();
@@ -9,13 +7,13 @@ document.addEventListener('DOMContentLoaded', function() {
 function initializeApp() {
     console.log('Initializing app...');
     
-    // Show customer name modal if not set
+
     setTimeout(() => {
         showCustomerModal();
         updateCurrentNameDisplay();
     }, 500);
     
-    // Simulate loading screen
+
     setTimeout(() => {
         if (document.getElementById('loading-screen')) {
             document.getElementById('loading-screen').style.opacity = '0';
@@ -25,27 +23,27 @@ function initializeApp() {
         }
     }, 1000);
 
-    // Load featured products
+
     loadFeaturedProducts();
     
-    // Initialize cart count
+
     updateCartCount();
     
-    // Initialize category interactions
+
     initializeCategories();
     
-    // Initialize navigation dropdown
+
     initializeNavigation();
     
-    // Fix hero buttons immediately - SIMPLIFIED DIRECT FIX
+
     fixHeroButtons();
     
     console.log('SynapseSparks initialized successfully!');
 }
 
-// CUSTOMER NAME FUNCTIONS
+
 function showCustomerModal() {
-    // Check if customer name already exists
+
     const existingName = localStorage.getItem('customerName');
     if (!existingName) {
         const modal = document.getElementById('customer-modal');
@@ -97,19 +95,19 @@ function updateCurrentNameDisplay() {
     }
 }
 
-// FIX HERO BUTTONS - ULTRA SIMPLE FIX
+
 function fixHeroButtons() {
     console.log('Fixing hero buttons...');
     
-    // Wait a bit for everything to load
+  
     setTimeout(() => {
-        // DIRECT FIX: Add event listeners to existing buttons
+  
         const startBuildingBtn = document.querySelector('.hero-buttons .btn-primary');
         const exploreBtn = document.querySelector('.hero-buttons .btn-secondary');
         
         if (startBuildingBtn) {
             console.log('Fixing Start Building button');
-            // Remove any href and add click handler
+       
             startBuildingBtn.href = 'javascript:void(0)';
             startBuildingBtn.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -121,7 +119,7 @@ function fixHeroButtons() {
         
         if (exploreBtn) {
             console.log('Fixing Explore Products button');
-            // Remove any href and add click handler
+
             exploreBtn.href = 'javascript:void(0)';
             exploreBtn.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -151,7 +149,7 @@ function loadFeaturedProducts() {
     
     const featuredProducts = getFeaturedProducts();
     
-    // Clear existing content
+
     featuredContainer.innerHTML = '';
     
     if (featuredProducts.length === 0) {
@@ -165,7 +163,7 @@ function loadFeaturedProducts() {
     });
 }
 
-// SIMPLIFIED: Just show image and name
+
 function createProductCard(product, index) {
     console.log(`Creating product card: ${product.id} - ${product.name}`);
     
@@ -192,7 +190,7 @@ function addToCart(productId) {
     console.log('addToCart called for:', productId);
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
     
-    // Find product in all categories
+
     let product = null;
     for (const category in products) {
         product = products[category].find(p => p.id === productId);
@@ -210,7 +208,7 @@ function addToCart(productId) {
         localStorage.setItem('cart', JSON.stringify(cart));
         updateCartCount();
         
-        // Show added to cart animation
+
         showCartNotification('Product added to cart!');
     } else {
         console.error('Product not found:', productId);
@@ -283,7 +281,7 @@ function initializeNavigation() {
     });
 }
 
-// Category Modal Functions
+
 function openCategoryModal(category) {
     console.log('openCategoryModal called for:', category);
     const modal = document.getElementById('category-modal');
@@ -294,8 +292,7 @@ function openCategoryModal(category) {
         console.error('Modal elements not found!');
         return;
     }
-    
-    // Set category title
+
     const categoryNames = {
         'motherboards': 'Motherboards',
         'prebuilts': 'Prebuilt Systems', 
@@ -305,15 +302,14 @@ function openCategoryModal(category) {
     };
     
     title.textContent = categoryNames[category] || category;
-    
-    // Clear previous products and show loading
+
     grid.innerHTML = '<div class="loading-message">Loading products...</div>';
     
-    // Show modal
+
     modal.style.display = 'block';
     document.body.style.overflow = 'hidden';
     
-    // Load products
+
     loadCategoryProducts(category, grid);
 }
 
@@ -354,26 +350,24 @@ function loadCategoryProducts(category, grid) {
     }
     
     console.log(`Found ${categoryProducts.length} products`);
-    
-    // Clear loading message
+
     grid.innerHTML = '';
     
     if (categoryProducts.length === 0) {
         grid.innerHTML = '<div class="no-products">No products found in this category.</div>';
         return;
     }
-    
-    // Add products to modal
+
     categoryProducts.forEach((product, index) => {
         const productCard = createModalProductCard(product, index);
         grid.appendChild(productCard);
     });
     
-    // Setup hover positioning
+
     setupHoverPositioning();
 }
 
-// Create product card with hover details panel
+
 function createModalProductCard(product, index) {
     console.log(`Creating modal product card: ${product.id}`);
     
@@ -381,12 +375,11 @@ function createModalProductCard(product, index) {
     card.className = 'modal-product-card fade-in-up';
     card.style.animationDelay = `${index * 0.05}s`;
     
-    // Check if product needs recommendations
+
     const needsRecommendations = !['prebuilts', 'laptops', 'peripherals', 'monitors'].some(cat => 
         products[cat]?.some(p => p.id === product.id)
     );
-    
-    // Get product recommendations only if needed
+
     const recommendations = needsRecommendations ? getProductRecommendations(product) : '';
     
     card.innerHTML = `
@@ -428,7 +421,7 @@ function createModalProductCard(product, index) {
         </div>
     `;
     
-    // Add mouseenter event to handle positioning
+
     card.addEventListener('mouseenter', function(e) {
         const panel = this.querySelector('.hover-details-panel');
         if (panel) {
@@ -439,24 +432,24 @@ function createModalProductCard(product, index) {
     return card;
 }
 
-// Function to position hover panel based on card position
+
 function positionHoverPanel(card, panel) {
     const rect = card.getBoundingClientRect();
     const modalRect = card.closest('.category-modal-content')?.getBoundingClientRect() || 
                      document.body.getBoundingClientRect();
     
-    // Check if card is on right side of modal
+
     const cardCenterX = rect.left + (rect.width / 2);
     const modalCenterX = modalRect.left + (modalRect.width / 2);
     
-    // Remove all position classes
+
     panel.classList.remove('hover-left', 'hover-right');
     
-    // If card is on right half, show panel on left
+
     if (cardCenterX > modalCenterX) {
         panel.classList.add('hover-left');
     } else {
-        // Otherwise show on right (default)
+
         panel.classList.add('hover-right');
     }
 }
@@ -464,19 +457,19 @@ function positionHoverPanel(card, panel) {
 function getProductRecommendations(product) {
     let recommendations = '<div class="recommendations-grid">';
     
-    // Only show recommendations for components that need partners
+s
     const componentTypes = ['cpus', 'motherboards', 'ram', 'gpus', 'storage', 'psus', 'cases', 'cooling'];
     const isComponent = componentTypes.some(type => 
         products[type]?.some(p => p.id === product.id)
     );
     
     if (!isComponent) {
-        return ''; // No recommendations for non-components
+        return ''; 
     }
     
-    // Motherboard recommendations
+
     if (product.chipset && product.socket) {
-        // Find 2-3 compatible CPUs
+
         const compatibleCPUs = products.cpus?.filter(cpu => 
             cpu.socket === product.socket
         ).slice(0, 2) || [];
@@ -495,7 +488,7 @@ function getProductRecommendations(product) {
         }
     }
     
-    // RAM recommendations for motherboards
+
     if (product.ramType) {
         const compatibleRAM = products.ram?.filter(ram => 
             ram.type === product.ramType
@@ -515,7 +508,7 @@ function getProductRecommendations(product) {
         }
     }
     
-    // GPU recommendations for CPUs
+
     if (product.socket && product.price > 15000) {
         recommendations += `
             <div class="recommendation-category">
@@ -528,7 +521,7 @@ function getProductRecommendations(product) {
         `;
     }
     
-    // Case recommendations for motherboards
+
     if (product.formFactor) {
         recommendations += `
             <div class="recommendation-category">
@@ -552,7 +545,7 @@ function getProductRecommendations(product) {
 function formatSpecificationsForHover(product) {
     if (!product.specs) return '<p>No specifications available</p>';
     
-    // If specs are comma-separated, convert to list
+
     if (product.specs.includes(',')) {
         const specItems = product.specs.split(',').map(item => item.trim());
         return `<ul>${specItems.map(item => `<li>${item}</li>`).join('')}</ul>`;
@@ -561,7 +554,7 @@ function formatSpecificationsForHover(product) {
 }
 
 function setupHoverPositioning() {
-    // Reposition panels on window resize
+
     window.addEventListener('resize', function() {
         document.querySelectorAll('.modal-product-card').forEach(card => {
             const panel = card.querySelector('.hover-details-panel');
@@ -571,7 +564,7 @@ function setupHoverPositioning() {
         });
     });
     
-    // Also reposition when modal is scrolled
+
     const modalContent = document.querySelector('.category-modal-content');
     if (modalContent) {
         modalContent.addEventListener('scroll', function() {
@@ -594,7 +587,7 @@ function closeCategoryModal() {
     }
 }
 
-// Utility functions
+
 function truncateText(text, length) {
     if (!text) return 'No description';
     if (text.length <= length) return text;
@@ -604,7 +597,7 @@ function truncateText(text, length) {
 function formatSpecifications(specs) {
     if (!specs) return '<div class="spec-item">No specifications available</div>';
     
-    // If specs are comma-separated, convert to list
+
     if (specs.includes(',')) {
         const specItems = specs.split(',').map(item => item.trim());
         return specItems.map(item => `<div class="spec-item">${item}</div>`).join('');
@@ -639,7 +632,7 @@ function getFeaturedProducts() {
     return featured;
 }
 
-// Close modal when clicking outside
+
 document.addEventListener('click', function(event) {
     const categoryModal = document.getElementById('category-modal');
     const customerModal = document.getElementById('customer-modal');
@@ -653,7 +646,7 @@ document.addEventListener('click', function(event) {
     }
 });
 
-// Close modal with Escape key
+
 document.addEventListener('keydown', function(event) {
     if (event.key === 'Escape') {
         const categoryModal = document.getElementById('category-modal');
@@ -669,7 +662,7 @@ document.addEventListener('keydown', function(event) {
     }
 });
 
-// EMERGENCY FIX - Add direct event listeners to buttons
+
 function emergencyButtonFix() {
     console.log('Running emergency button fix...');
     
@@ -678,7 +671,7 @@ function emergencyButtonFix() {
     
     if (startBtn) {
         console.log('Emergency fixing Start Building button');
-        // Completely replace the button
+
         const newStartBtn = document.createElement('button');
         newStartBtn.className = startBtn.className;
         newStartBtn.textContent = startBtn.textContent;
@@ -691,7 +684,7 @@ function emergencyButtonFix() {
     
     if (exploreBtn) {
         console.log('Emergency fixing Explore Products button');
-        // Completely replace the button
+        
         const newExploreBtn = document.createElement('button');
         newExploreBtn.className = exploreBtn.className;
         newExploreBtn.textContent = exploreBtn.textContent;
@@ -709,10 +702,10 @@ function emergencyButtonFix() {
     }
 }
 
-// Run emergency fix after page loads
+
 setTimeout(emergencyButtonFix, 1500);
 
-// Export functions to global scope
+
 window.addToCart = addToCart;
 window.closeCategoryModal = closeCategoryModal;
 window.changeCustomerName = changeCustomerName;

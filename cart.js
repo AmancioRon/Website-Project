@@ -1,4 +1,4 @@
-// Cart JavaScript
+
 
 function loadCart() {
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -38,7 +38,7 @@ function loadCart() {
 }
 
 function updateSummary(subtotal) {
-    const tax = subtotal * 0.03; // 3% tax
+    const tax = subtotal * 0.03; 
     const total = subtotal + tax;
 
     document.getElementById('subtotal').textContent = formatPrice(subtotal);
@@ -76,7 +76,7 @@ function generateReceipt() {
     const receipt = document.getElementById('receipt-content');
     let subtotal = 0;
 
-    // Get customer name from localStorage
+    
     const customerName = localStorage.getItem('customerName') || 'Guest Customer';
 
     let receiptHTML = `
@@ -99,7 +99,7 @@ function generateReceipt() {
         subtotal += item.price;
     });
 
-    const tax = subtotal * 0.03; // 3% tax
+    const tax = subtotal * 0.03; 
     const total = subtotal + tax;
 
     receiptHTML += `
@@ -143,7 +143,7 @@ function sendToFacebook() {
     
     const message = `New Order from ${customerName}!\n\nItems:\n${itemsText}\nSubtotal: ${formatPrice(subtotal)}\nTax (3%): ${formatPrice(tax)}\nTotal: ${formatPrice(total)}`;
     
-    // Open YOUR Facebook page
+
     const facebookUrl = `https://www.facebook.com/profile.php?id=61582661370168`;
     window.open(facebookUrl, '_blank');
     
@@ -154,7 +154,7 @@ function closeModal() {
     document.getElementById('checkout-modal').style.display = 'none';
 }
 
-// PRICE FORMATTING FUNCTION
+
 function formatPrice(price) {
     if (typeof price === 'number') {
         return '₱' + price.toLocaleString('en-PH');
@@ -162,10 +162,10 @@ function formatPrice(price) {
     return price;
 }
 
-// Initialize cart when page loads
+
 document.addEventListener('DOMContentLoaded', loadCart);
 
-// Close modal when clicking outside
+
 window.onclick = function(event) {
     const modal = document.getElementById('checkout-modal');
     if (event.target === modal) {
@@ -179,17 +179,17 @@ function checkout() {
         return;
     }
 
-    // Calculate totals
+
     let subtotal = cart.reduce((sum, item) => sum + item.price, 0);
     let tax = subtotal * 0.03;
     let total = subtotal + tax;
     let customerName = localStorage.getItem('customerName') || 'Guest Customer';
     
-    // Capture order for admin panel
+ 
     if (typeof captureOrder === 'function') {
         captureOrder(cart, customerName, subtotal, tax, total);
     } else {
-        // Fallback: Save to localStorage
+
         let orders = JSON.parse(localStorage.getItem('adminOrders')) || [];
         orders.push({
             date: new Date().toLocaleString(),

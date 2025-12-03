@@ -1,4 +1,4 @@
-// PC Builder JavaScript
+
 
 let currentBuild = {
     cpu: null,
@@ -10,14 +10,14 @@ let currentBuild = {
     case: null
 };
 
-// Initialize the PC Builder
+
 document.addEventListener('DOMContentLoaded', function() {
     populateComponentOptions();
     updateCartCount();
 });
 
 function populateComponentOptions() {
-    // Populate CPUs
+
     const cpuSelect = document.getElementById('cpu-select');
     products.cpus.forEach(cpu => {
         const option = document.createElement('option');
@@ -26,7 +26,6 @@ function populateComponentOptions() {
         cpuSelect.appendChild(option);
     });
 
-    // Populate Motherboards
     const mbSelect = document.getElementById('motherboard-select');
     products.motherboards.forEach(mb => {
         const option = document.createElement('option');
@@ -35,7 +34,7 @@ function populateComponentOptions() {
         mbSelect.appendChild(option);
     });
 
-    // Populate RAM
+
     const ramSelect = document.getElementById('ram-select');
     products.ram.forEach(ram => {
         const option = document.createElement('option');
@@ -44,7 +43,7 @@ function populateComponentOptions() {
         ramSelect.appendChild(option);
     });
 
-    // Populate GPUs
+
     const gpuSelect = document.getElementById('gpu-select');
     products.gpus.forEach(gpu => {
         const option = document.createElement('option');
@@ -53,7 +52,7 @@ function populateComponentOptions() {
         gpuSelect.appendChild(option);
     });
 
-    // Populate Storage
+
     const storageSelect = document.getElementById('storage-select');
     products.storage.forEach(storage => {
         const option = document.createElement('option');
@@ -62,7 +61,7 @@ function populateComponentOptions() {
         storageSelect.appendChild(option);
     });
 
-    // Populate PSUs
+
     const psuSelect = document.getElementById('psu-select');
     products.psus.forEach(psu => {
         const option = document.createElement('option');
@@ -71,7 +70,7 @@ function populateComponentOptions() {
         psuSelect.appendChild(option);
     });
 
-    // Populate Cases
+
     const caseSelect = document.getElementById('case-select');
     products.cases.forEach(caseItem => {
         const option = document.createElement('option');
@@ -155,7 +154,6 @@ function checkCompatibility() {
     let allCompatible = true;
     const issues = [];
 
-    // Check CPU and Motherboard compatibility
     if (currentBuild.cpu && currentBuild.motherboard) {
         if (currentBuild.cpu.socket !== currentBuild.motherboard.socket) {
             allCompatible = false;
@@ -163,7 +161,6 @@ function checkCompatibility() {
         }
     }
 
-    // Check RAM and Motherboard compatibility
     if (currentBuild.ram && currentBuild.motherboard) {
         if (currentBuild.ram.type !== currentBuild.motherboard.ramType) {
             allCompatible = false;
@@ -171,7 +168,7 @@ function checkCompatibility() {
         }
     }
 
-    // Check case and motherboard form factor
+
     if (currentBuild.case && currentBuild.motherboard) {
         const caseFormFactors = compatibilityRules.formFactors[currentBuild.case.formFactor];
         if (!caseFormFactors || !caseFormFactors.includes(currentBuild.motherboard.formFactor)) {
@@ -180,12 +177,12 @@ function checkCompatibility() {
         }
     }
 
-    // Check if PSU wattage is sufficient
+
     if (currentBuild.psu) {
         let totalPower = 0;
         if (currentBuild.cpu) totalPower += currentBuild.cpu.tdp || 0;
         if (currentBuild.gpu) totalPower += currentBuild.gpu.power || 0;
-        totalPower += 100; // Buffer for other components
+        totalPower += 100; 
 
         if (currentBuild.psu.wattage < totalPower) {
             allCompatible = false;
@@ -193,7 +190,7 @@ function checkCompatibility() {
         }
     }
 
-    // Display results
+
     if (allCompatible && Object.values(currentBuild).some(Boolean)) {
         results.innerHTML = '<div class="compatible">✓ All components are compatible!</div>';
     } else if (issues.length === 0) {
@@ -226,10 +223,10 @@ function addPcToCart() {
     cart.push(pcBuild);
     localStorage.setItem('cart', JSON.stringify(cart));
     
-    // Show confirmation
+
     showCartNotification('Your custom PC build has been added to the cart!');
     
-    // Update cart count on all pages
+    
     updateCartCount();
 }
 
@@ -278,7 +275,7 @@ function updateCartCount() {
     }
 }
 
-// PRICE FORMATTING FUNCTION
+
 function formatPrice(price) {
     if (typeof price === 'number') {
         return '₱' + price.toLocaleString('en-PH');

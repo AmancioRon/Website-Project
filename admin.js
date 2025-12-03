@@ -1,6 +1,6 @@
-// Admin Panel JavaScript
 
-const ADMIN_PASSWORD = "admin123"; // Simple password for demo
+
+const ADMIN_PASSWORD = "admin123"; 
 let orders = JSON.parse(localStorage.getItem('adminOrders')) || [];
 
 function login() {
@@ -26,20 +26,20 @@ function logout() {
 }
 
 function openTab(tabName) {
-    // Hide all tab contents
+
     document.querySelectorAll('.tab-content').forEach(tab => {
         tab.classList.remove('active');
     });
 
-    // Remove active class from all buttons
+
     document.querySelectorAll('.tab-btn').forEach(btn => {
         btn.classList.remove('active');
     });
 
-    // Show the specific tab content
+  
     document.getElementById(tabName).classList.add('active');
     
-    // Add active class to the button that opened the tab
+  
     event.currentTarget.classList.add('active');
 }
 
@@ -89,7 +89,7 @@ function loadInventory() {
         });
     }
 
-    // Update stats
+
     document.getElementById('total-products').textContent = totalProducts;
     document.getElementById('total-value').textContent = formatPrice(totalValue);
     document.getElementById('total-categories').textContent = categories.size;
@@ -242,10 +242,10 @@ function addProduct(event) {
     const specs = document.getElementById('product-specs').value;
     const image = document.getElementById('product-image').value;
 
-    // Generate unique ID
+
     const productId = `${category}-${Date.now()}`;
     
-    // Create product object
+
     const newProduct = {
         id: productId,
         name: name,
@@ -255,7 +255,7 @@ function addProduct(event) {
         category: category.charAt(0).toUpperCase() + category.slice(1).replace('s', '') + (category !== 'prebuilts' && category !== 'laptops' ? 's' : '')
     };
 
-    // Add category-specific fields
+
     switch(category) {
         case 'motherboards':
             newProduct.socket = document.getElementById('spec-socket')?.value || '';
@@ -290,20 +290,19 @@ function addProduct(event) {
             break;
     }
 
-    // Add to products object
+
     if (!products[category]) {
         products[category] = [];
     }
     products[category].push(newProduct);
 
-    // Save to localStorage (simulated)
+
     alert('Product added successfully!');
     
-    // Reset form
+
     event.target.reset();
     document.getElementById('spec-fields').innerHTML = '';
-    
-    // Reload inventory
+
     loadInventory();
     loadStatistics();
 }
@@ -311,17 +310,17 @@ function addProduct(event) {
 function editProduct(category, productId) {
     const product = products[category].find(p => p.id === productId);
     if (product) {
-        // Fill the add product form with existing data
+ 
         document.getElementById('product-name').value = product.name;
         document.getElementById('product-price').value = product.price;
         document.getElementById('product-category').value = category;
         document.getElementById('product-image').value = product.image;
         document.getElementById('product-specs').value = product.specs;
         
-        // Update spec fields
+
         updateSpecFields();
         
-        // Fill spec fields if they exist
+
         setTimeout(() => {
             if (product.socket) document.getElementById('spec-socket').value = product.socket;
             if (product.chipset) document.getElementById('spec-chipset').value = product.chipset;
@@ -343,10 +342,10 @@ function editProduct(category, productId) {
             if (product.integratedGraphics) document.getElementById('spec-integratedGraphics').checked = product.integratedGraphics;
         }, 100);
         
-        // Delete the old product
+
         deleteProduct(category, productId, false);
         
-        // Scroll to add product form
+
         openTab('add-product');
         alert('Product loaded into edit form. Make changes and click "Add Product" to update.');
     }
@@ -366,7 +365,7 @@ function deleteProduct(category, productId, showAlert = true) {
 function loadOrders() {
     const ordersList = document.getElementById('orders-list');
     
-    // Load orders from localStorage
+
     orders = JSON.parse(localStorage.getItem('adminOrders')) || [];
     
     if (orders.length === 0) {
@@ -499,7 +498,7 @@ function printOrder(orderIndex) {
 }
 
 function loadStatistics() {
-    // Category breakdown
+
     const categoryBreakdown = document.getElementById('category-breakdown');
     let breakdownHTML = '';
     for (const [category, items] of Object.entries(products)) {
@@ -516,7 +515,7 @@ function loadStatistics() {
     }
     categoryBreakdown.innerHTML = breakdownHTML || '<p>No products yet</p>';
 
-    // Top products
+
     const topProductsDiv = document.getElementById('top-products');
     let allProducts = [];
     for (const [category, items] of Object.entries(products)) {
@@ -525,7 +524,7 @@ function loadStatistics() {
         });
     }
     
-    // Sort by price (highest first)
+
     allProducts.sort((a, b) => b.price - a.price);
     
     let topProductsHTML = '';
@@ -541,7 +540,7 @@ function loadStatistics() {
     topProductsDiv.innerHTML = topProductsHTML || '<p>No products yet</p>';
 }
 
-// Function to capture orders from checkout (to be called from cart.js)
+
 function captureOrder(cart, customerName, subtotal, tax, total) {
     const newOrder = {
         date: new Date().toLocaleString(),

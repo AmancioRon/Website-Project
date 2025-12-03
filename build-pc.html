@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Header -->
+
     <header class="main-header">
         <nav class="nav-container">
             <div class="logo">
@@ -29,20 +29,20 @@
         </nav>
     </header>
 
-    <!-- PC Builder Section -->
+
     <section class="pc-builder">
         <div class="container">
             <h1 class="section-title">Build Your Dream PC</h1>
             <p class="builder-description">Select components and build your custom PC. Check compatibility and get real-time pricing.</p>
 
             <div class="builder-layout">
-                <!-- Component Selection -->
+
                 <div class="component-selection">
                     <div class="component-category">
                         <h3>CPU</h3>
                         <select id="cpu-select" class="component-select" onchange="updateComponent('cpu', this.value)">
                             <option value="">Select a CPU</option>
-                            <!-- Options populated by JavaScript -->
+             
                         </select>
                     </div>
 
@@ -94,11 +94,11 @@
                     </div>
                 </div>
 
-                <!-- Summary and Compatibility -->
+
                 <div class="build-summary">
                     <h3>Your Build</h3>
                     <div class="summary-list" id="summary-list">
-                        <!-- Components will be listed here -->
+ 
                     </div>
                     <div class="total-price">
                         Total: <span id="total-price">0.00</span>
@@ -107,7 +107,7 @@
                     <div class="compatibility-check">
                         <h3>Compatibility Check</h3>
                         <div id="compatibility-results">
-                            <!-- Compatibility results will be shown here -->
+                    
                         </div>
                     </div>
                 </div>
@@ -118,7 +118,7 @@
     <script src="products-data.js"></script>
     <script src="pc-builder.js"></script>
     <script>
-        // Update cart count
+ 
         function updateCartCount() {
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
             const cartCount = document.getElementById('cart-count');
