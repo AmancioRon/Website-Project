@@ -20,12 +20,14 @@ function loadCart() {
         const cartItem = document.createElement('div');
         cartItem.className = 'cart-item';
         cartItem.innerHTML = `
-            <div class="item-image">${item.image || '📦'}</div>
+            <div class="item-image">
+                <img src="${item.image || 'https://img.icons8.com/color/96/box.png'}" alt="${item.name}" onerror="this.src='https://img.icons8.com/color/96/box.png'" />
+            </div>
             <div class="item-details">
                 <h4>${item.name}</h4>
                 <p>${item.specs || 'Custom PC Build'}</p>
             </div>
-            <div class="item-price">$${item.price.toFixed(2)}</div>
+            <div class="item-price price-formatted">${formatPrice(item.price)}</div>
             <button class="remove-btn" onclick="removeFromCart(${index})">×</button>
         `;
         cartItems.appendChild(cartItem);
@@ -39,9 +41,9 @@ function updateSummary(subtotal) {
     const tax = subtotal * 0.08; // 8% tax
     const total = subtotal + tax;
 
-    document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
-    document.getElementById('tax').textContent = `$${tax.toFixed(2)}`;
-    document.getElementById('total').textContent = `$${total.toFixed(2)}`;
+    document.getElementById('subtotal').textContent = formatPrice(subtotal);
+    document.getElementById('tax').textContent = formatPrice(tax);
+    document.getElementById('total').textContent = formatPrice(total);
 }
 
 function removeFromCart(index) {
@@ -86,7 +88,7 @@ function generateReceipt() {
         receiptHTML += `
             <div class="receipt-item">
                 <span>${item.name}</span>
-                <span>$${item.price.toFixed(2)}</span>
+                <span class="price-formatted">${formatPrice(item.price)}</span>
             </div>
         `;
         subtotal += item.price;
@@ -100,15 +102,15 @@ function generateReceipt() {
         <div class="receipt-totals">
             <div class="receipt-line">
                 <span>Subtotal:</span>
-                <span>$${subtotal.toFixed(2)}</span>
+                <span class="price-formatted">${formatPrice(subtotal)}</span>
             </div>
             <div class="receipt-line">
                 <span>Tax (8%):</span>
-                <span>$${tax.toFixed(2)}</span>
+                <span class="price-formatted">${formatPrice(tax)}</span>
             </div>
             <div class="receipt-line total">
                 <span>Total:</span>
-                <span>$${total.toFixed(2)}</span>
+                <span class="price-formatted">${formatPrice(total)}</span>
             </div>
         </div>
         <div class="customer-info">
@@ -144,6 +146,14 @@ window.onclick = function(event) {
     if (event.target === modal) {
         closeModal();
     }
+}
+
+// PRICE FORMATTING FUNCTION
+function formatPrice(price) {
+    if (typeof price === 'number') {
+        return '₱' + price.toLocaleString('en-PH');
+    }
+    return price;
 }
 
 // Initialize cart when page loads

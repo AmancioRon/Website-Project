@@ -13,6 +13,7 @@ let currentBuild = {
 // Initialize the PC Builder
 document.addEventListener('DOMContentLoaded', function() {
     populateComponentOptions();
+    updateCartCount();
 });
 
 function populateComponentOptions() {
@@ -21,7 +22,7 @@ function populateComponentOptions() {
     products.cpus.forEach(cpu => {
         const option = document.createElement('option');
         option.value = cpu.id;
-        option.textContent = `${cpu.name} - $${cpu.price}`;
+        option.textContent = `${cpu.name} - ${formatPrice(cpu.price)}`;
         cpuSelect.appendChild(option);
     });
 
@@ -30,7 +31,7 @@ function populateComponentOptions() {
     products.motherboards.forEach(mb => {
         const option = document.createElement('option');
         option.value = mb.id;
-        option.textContent = `${mb.name} - $${mb.price}`;
+        option.textContent = `${mb.name} - ${formatPrice(mb.price)}`;
         mbSelect.appendChild(option);
     });
 
@@ -39,7 +40,7 @@ function populateComponentOptions() {
     products.ram.forEach(ram => {
         const option = document.createElement('option');
         option.value = ram.id;
-        option.textContent = `${ram.name} - $${ram.price}`;
+        option.textContent = `${ram.name} - ${formatPrice(ram.price)}`;
         ramSelect.appendChild(option);
     });
 
@@ -48,7 +49,7 @@ function populateComponentOptions() {
     products.gpus.forEach(gpu => {
         const option = document.createElement('option');
         option.value = gpu.id;
-        option.textContent = `${gpu.name} - $${gpu.price}`;
+        option.textContent = `${gpu.name} - ${formatPrice(gpu.price)}`;
         gpuSelect.appendChild(option);
     });
 
@@ -57,7 +58,7 @@ function populateComponentOptions() {
     products.storage.forEach(storage => {
         const option = document.createElement('option');
         option.value = storage.id;
-        option.textContent = `${storage.name} - $${storage.price}`;
+        option.textContent = `${storage.name} - ${formatPrice(storage.price)}`;
         storageSelect.appendChild(option);
     });
 
@@ -66,7 +67,7 @@ function populateComponentOptions() {
     products.psus.forEach(psu => {
         const option = document.createElement('option');
         option.value = psu.id;
-        option.textContent = `${psu.name} - $${psu.price}`;
+        option.textContent = `${psu.name} - ${formatPrice(psu.price)}`;
         psuSelect.appendChild(option);
     });
 
@@ -75,7 +76,7 @@ function populateComponentOptions() {
     products.cases.forEach(caseItem => {
         const option = document.createElement('option');
         option.value = caseItem.id;
-        option.textContent = `${caseItem.name} - $${caseItem.price}`;
+        option.textContent = `${caseItem.name} - ${formatPrice(caseItem.price)}`;
         caseSelect.appendChild(option);
     });
 }
@@ -122,7 +123,7 @@ function updateSummary() {
             const item = document.createElement('div');
             item.className = 'summary-item';
             item.innerHTML = `
-                <strong>${type.toUpperCase()}:</strong> ${product.name} - $${product.price}
+                <strong>${type.toUpperCase()}:</strong> ${product.name} - ${formatPrice(product.price)}
                 <button onclick="removeComponent('${type}')" class="remove-btn">×</button>
             `;
             summaryList.appendChild(item);
@@ -144,7 +145,7 @@ function updateTotalPrice() {
             total += product.price;
         }
     }
-    document.getElementById('total-price').textContent = total.toFixed(2);
+    document.getElementById('total-price').textContent = formatPrice(total);
 }
 
 function checkCompatibility() {
@@ -173,7 +174,7 @@ function checkCompatibility() {
     // Check case and motherboard form factor
     if (currentBuild.case && currentBuild.motherboard) {
         const caseFormFactors = compatibilityRules.formFactors[currentBuild.case.formFactor];
-        if (!caseFormFactors.includes(currentBuild.motherboard.formFactor)) {
+        if (!caseFormFactors || !caseFormFactors.includes(currentBuild.motherboard.formFactor)) {
             allCompatible = false;
             issues.push('Motherboard form factor is not compatible with the case.');
         }
@@ -216,7 +217,7 @@ function addPcToCart() {
     const pcBuild = {
         id: 'custom-pc-' + Date.now(),
         name: 'Custom PC Build',
-        price: parseFloat(document.getElementById('total-price').textContent),
+        price: getCurrentBuildTotal(),
         specs: 'Custom built PC with selected components',
         components: { ...currentBuild }
     };
@@ -230,6 +231,16 @@ function addPcToCart() {
     
     // Update cart count on all pages
     updateCartCount();
+}
+
+function getCurrentBuildTotal() {
+    let total = 0;
+    for (const product of Object.values(currentBuild)) {
+        if (product) {
+            total += product.price;
+        }
+    }
+    return total;
 }
 
 function showCartNotification(message) {
@@ -257,4 +268,20 @@ function showCartNotification(message) {
             document.body.removeChild(notification);
         }, 300);
     }, 2000);
+}
+
+function updateCartCount() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const cartCount = document.getElementById('cart-count');
+    if (cartCount) {
+        cartCount.textContent = cart.length;
+    }
+}
+
+// PRICE FORMATTING FUNCTION
+function formatPrice(price) {
+    if (typeof price === 'number') {
+        return '₱' + price.toLocaleString('en-PH');
+    }
+    return price;
 }

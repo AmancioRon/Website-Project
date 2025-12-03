@@ -50,11 +50,13 @@ function loadInventory() {
             const inventoryItem = document.createElement('div');
             inventoryItem.className = 'inventory-item';
             inventoryItem.innerHTML = `
-                <div class="item-image">${item.image}</div>
+                <div class="item-image">
+                    <img src="${item.image}" alt="${item.name}" onerror="this.src='https://img.icons8.com/color/96/box.png'" />
+                </div>
                 <div class="item-info">
                     <h4>${item.name}</h4>
                     <p>${item.specs}</p>
-                    <div class="item-price">$${item.price}</div>
+                    <div class="item-price price-formatted">${formatPrice(item.price)}</div>
                     <div class="item-category">${category}</div>
                 </div>
                 <div class="item-actions">
@@ -86,7 +88,11 @@ function addProduct(event) {
         name: name,
         price: price,
         specs: specs,
-        image: image
+        image: image || 'https://img.icons8.com/color/96/box.png',
+        socket: '',
+        chipset: '',
+        ramType: '',
+        formFactor: ''
     };
 
     // Add to products object
@@ -111,10 +117,12 @@ function editProduct(category, productId) {
         const newName = prompt('Enter new name:', product.name);
         const newPrice = prompt('Enter new price:', product.price);
         const newSpecs = prompt('Enter new specs:', product.specs);
+        const newImage = prompt('Enter new image URL:', product.image);
 
         if (newName) product.name = newName;
         if (newPrice) product.price = parseFloat(newPrice);
         if (newSpecs) product.specs = newSpecs;
+        if (newImage) product.image = newImage;
 
         loadInventory();
         alert('Product updated!');
@@ -127,4 +135,12 @@ function deleteProduct(category, productId) {
         loadInventory();
         alert('Product deleted!');
     }
+}
+
+// PRICE FORMATTING FUNCTION
+function formatPrice(price) {
+    if (typeof price === 'number') {
+        return '₱' + price.toLocaleString('en-PH');
+    }
+    return price;
 }

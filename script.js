@@ -2,17 +2,22 @@
 
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded, initializing app...');
     initializeApp();
 });
 
 function initializeApp() {
+    console.log('Initializing app...');
+    
     // Simulate loading screen
     setTimeout(() => {
-        document.getElementById('loading-screen').style.opacity = '0';
-        setTimeout(() => {
-            document.getElementById('loading-screen').style.display = 'none';
-        }, 500);
-    }, 3000);
+        if (document.getElementById('loading-screen')) {
+            document.getElementById('loading-screen').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('loading-screen').style.display = 'none';
+            }, 500);
+        }
+    }, 1000);
 
     // Load featured products
     loadFeaturedProducts();
@@ -26,75 +31,104 @@ function initializeApp() {
     // Initialize navigation dropdown
     initializeNavigation();
     
+    // Fix hero buttons immediately
+    fixHeroButtons();
+    
     console.log('SynapseSparks initialized successfully!');
 }
 
+// FIX HERO BUTTONS
+function fixHeroButtons() {
+    console.log('Fixing hero buttons...');
+    
+    // Fix Start Building button
+    const startBuildingBtn = document.querySelector('.hero-buttons .btn-primary');
+    if (startBuildingBtn && startBuildingBtn.tagName === 'A') {
+        console.log('Found Start Building button');
+        startBuildingBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('Start Building clicked, redirecting to build-pc.html');
+            window.location.href = 'build-pc.html';
+        });
+    }
+    
+    // Fix Explore Products button
+    const exploreBtn = document.querySelector('.explore-products-btn');
+    if (exploreBtn) {
+        console.log('Found Explore Products button');
+        exploreBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('Explore Products clicked');
+            const categories = document.getElementById('categories');
+            if (categories) {
+                categories.scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    }
+}
+
 function loadFeaturedProducts() {
+    console.log('Loading featured products...');
     const featuredContainer = document.getElementById('featured-products');
+    if (!featuredContainer) {
+        console.log('No featured products container found');
+        return;
+    }
+    
     const featuredProducts = getFeaturedProducts();
     
     // Clear existing content
     featuredContainer.innerHTML = '';
     
-    featuredProducts.forEach(product => {
-        const productCard = createProductCard(product);
+    if (featuredProducts.length === 0) {
+        featuredContainer.innerHTML = '<div class="no-products">No featured products available.</div>';
+        return;
+    }
+    
+    featuredProducts.forEach((product, index) => {
+        const productCard = createProductCard(product, index);
         featuredContainer.appendChild(productCard);
     });
 }
 
-function createProductCard(product) {
+// SIMPLIFIED: Just show image and name
+function createProductCard(product, index) {
+    console.log(`Creating product card: ${product.id} - ${product.name}`);
+    
     const card = document.createElement('div');
     card.className = 'product-card fade-in-up';
-    card.innerHTML = `
-        <div class="product-image">
-            ${product.image}
-        </div>
-        <div class="product-info">
-            <h3 class="product-title">${product.name}</h3>
-            <div class="product-price">$${product.price}</div>
-            <div class="product-specs">${product.specs}</div>
-            <button class="add-to-cart" onclick="addToCart('${product.id}')">
-                Add to Cart
-            </button>
-        </div>
-    `;
-    return card;
-}
-
-function createFeaturedProductCard(product, index) {
-    const card = document.createElement('div');
-    card.className = `product-card featured-product-card fade-in-up`;
     card.style.animationDelay = `${index * 0.1}s`;
     
     card.innerHTML = `
-        <div class="holographic-effect">
-            <div class="featured-badge">FEATURED</div>
-            <div class="product-category-tag">${product.category || 'PREMIUM'}</div>
-            <div class="product-image">
-                ${product.image}
-            </div>
+        <div class="product-image">
+            <img src="${product.image || 'https://img.icons8.com/color/96/box.png'}" alt="${product.name}" 
+                 onerror="this.onerror=null; this.src='https://img.icons8.com/color/96/box.png'">
         </div>
         <div class="product-info">
             <h3 class="product-title">${product.name}</h3>
-            <div class="product-price">$${product.price}</div>
-            <div class="product-specs">${product.specs}</div>
-            <button class="add-to-cart" onclick="addToCart('${product.id}')">
-                Add to Cart
-            </button>
+            <div class="product-price price-formatted">${formatPrice(product.price)}</div>
+            <button class="add-to-cart" onclick="window.addToCart('${product.id}')">Add to Cart</button>
         </div>
-        <div class="floating-label">Limited Stock!</div>
     `;
+    
     return card;
 }
 
 function addToCart(productId) {
+    console.log('addToCart called for:', productId);
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
     
     // Find product in all categories
     let product = null;
     for (const category in products) {
         product = products[category].find(p => p.id === productId);
-        if (product) break;
+        if (product) {
+            console.log('Found product:', product.name);
+            break;
+        }
     }
     
     if (product) {
@@ -109,6 +143,7 @@ function addToCart(productId) {
         showCartNotification('Product added to cart!');
     } else {
         console.error('Product not found:', productId);
+        showCartNotification('Error: Product not found!', true);
     }
 }
 
@@ -120,7 +155,7 @@ function updateCartCount() {
     }
 }
 
-function showCartNotification(message) {
+function showCartNotification(message, isError = false) {
     const notification = document.createElement('div');
     notification.className = 'cart-notification';
     notification.textContent = message;
@@ -128,7 +163,7 @@ function showCartNotification(message) {
         position: fixed;
         top: 100px;
         right: 20px;
-        background: var(--primary);
+        background: ${isError ? '#ff4444' : 'var(--primary)'};
         color: var(--dark);
         padding: 1rem 2rem;
         border-radius: 5px;
@@ -142,63 +177,44 @@ function showCartNotification(message) {
     setTimeout(() => {
         notification.style.animation = 'slideInRight 0.3s ease reverse';
         setTimeout(() => {
-            document.body.removeChild(notification);
+            if (notification.parentNode) {
+                document.body.removeChild(notification);
+            }
         }, 300);
     }, 2000);
 }
 
 function initializeCategories() {
     console.log('Initializing categories...');
-    
     document.querySelectorAll('.category-card').forEach(card => {
         card.addEventListener('click', function() {
             const category = this.dataset.category;
-            console.log('Category card clicked:', category);
+            console.log('Category clicked:', category);
             
             if (category === 'builder') {
                 window.location.href = 'build-pc.html';
             } else {
-                // Open category modal
                 openCategoryModal(category);
             }
         });
     });
-
-    // Add smooth scroll for explore products button
-    const exploreBtn = document.querySelector('.explore-products-btn');
-    if (exploreBtn) {
-        exploreBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            document.getElementById('categories').scrollIntoView({ 
-                behavior: 'smooth',
-                block: 'start'
-            });
-        });
-    }
-    
-    console.log('Categories initialized successfully');
 }
 
 function initializeNavigation() {
     console.log('Initializing navigation...');
-    
-    // Add click events to dropdown categories
     document.querySelectorAll('.dropdown-category').forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
             const category = this.dataset.category;
-            console.log('Navigation category clicked:', category);
+            console.log('Nav category clicked:', category);
             openCategoryModal(category);
         });
     });
-
-    console.log('Navigation initialized successfully');
 }
 
 // Category Modal Functions
 function openCategoryModal(category) {
-    console.log('Opening category modal for:', category);
-    
+    console.log('openCategoryModal called for:', category);
     const modal = document.getElementById('category-modal');
     const title = document.getElementById('modal-category-title');
     const grid = document.getElementById('category-products-grid');
@@ -226,14 +242,13 @@ function openCategoryModal(category) {
     modal.style.display = 'block';
     document.body.style.overflow = 'hidden';
     
-    // Load products immediately (no artificial delay)
+    // Load products
     loadCategoryProducts(category, grid);
 }
 
 function loadCategoryProducts(category, grid) {
-    let categoryProducts = [];
-    
     console.log('Loading products for category:', category);
+    let categoryProducts = [];
     
     switch(category) {
         case 'motherboards':
@@ -246,26 +261,20 @@ function loadCategoryProducts(category, grid) {
             categoryProducts = products.laptops || [];
             break;
         case 'components':
-            // Combine all component categories
             categoryProducts = [
                 ...(products.cpus || []),
                 ...(products.ram || []),
                 ...(products.gpus || []),
                 ...(products.storage || []),
                 ...(products.psus || []),
-                ...(products.cases || [])
+                ...(products.cases || []),
+                ...(products.cooling || [])
             ];
             break;
         case 'peripherals':
-            // Combine all peripheral categories
             categoryProducts = [
                 ...(products.monitors || []),
-                ...(products.mice || []),
-                ...(products.keyboards || []),
-                ...(products.headsets || []),
-                ...(products.mousepads || []),
-                ...(products.webcams || []),
-                ...(products.microphones || [])
+                ...(products.peripherals || [])
             ];
             break;
         default:
@@ -273,7 +282,7 @@ function loadCategoryProducts(category, grid) {
             categoryProducts = [];
     }
     
-    console.log(`Found ${categoryProducts.length} products for ${category}`);
+    console.log(`Found ${categoryProducts.length} products`);
     
     // Clear loading message
     grid.innerHTML = '';
@@ -288,27 +297,221 @@ function loadCategoryProducts(category, grid) {
         const productCard = createModalProductCard(product, index);
         grid.appendChild(productCard);
     });
+    
+    // Setup hover positioning
+    setupHoverPositioning();
 }
 
+// Create product card with hover details panel
 function createModalProductCard(product, index) {
+    console.log(`Creating modal product card: ${product.id}`);
+    
     const card = document.createElement('div');
     card.className = 'modal-product-card fade-in-up';
     card.style.animationDelay = `${index * 0.05}s`;
     
+    // Check if product needs recommendations
+    const needsRecommendations = !['prebuilts', 'laptops', 'peripherals', 'monitors'].some(cat => 
+        products[cat]?.some(p => p.id === product.id)
+    );
+    
+    // Get product recommendations only if needed
+    const recommendations = needsRecommendations ? getProductRecommendations(product) : '';
+    
     card.innerHTML = `
         <div class="modal-product-image">
-            ${product.image || '📦'}
+            <img src="${product.image || 'https://img.icons8.com/color/96/box.png'}" alt="${product.name}" 
+                 onerror="this.onerror=null; this.src='https://img.icons8.com/color/96/box.png'">
         </div>
         <div class="modal-product-info">
             <h4 class="modal-product-title">${product.name}</h4>
-            <div class="modal-product-price">$${product.price}</div>
-            <div class="modal-product-specs">${product.specs}</div>
-            <button class="add-to-cart modal-add-to-cart" onclick="addToCart('${product.id}')">
-                Add to Cart
-            </button>
+            <div class="modal-product-price price-formatted">${formatPrice(product.price)}</div>
+        </div>
+        
+        <!-- Hover Details Panel - Data attribute for positioning -->
+        <div class="hover-details-panel" data-position="auto">
+            <div class="hover-details-content">
+                <h3>${product.name}</h3>
+                <div class="hover-price price-formatted">${formatPrice(product.price)}</div>
+                
+                <div class="hover-section">
+                    <h4>Specifications</h4>
+                    <div class="hover-specs-list">
+                        ${formatSpecificationsForHover(product)}
+                    </div>
+                </div>
+                
+                ${needsRecommendations && recommendations ? `
+                <div class="hover-section">
+                    <h4>Recommended Partners</h4>
+                    <div class="hover-recommendations">
+                        ${recommendations}
+                    </div>
+                </div>
+                ` : ''}
+                
+                <button class="btn btn-primary hover-add-to-cart" onclick="window.addToCart('${product.id}')">
+                    Add to Cart
+                </button>
+            </div>
         </div>
     `;
+    
+    // Add mouseenter event to handle positioning
+    card.addEventListener('mouseenter', function(e) {
+        const panel = this.querySelector('.hover-details-panel');
+        if (panel) {
+            positionHoverPanel(this, panel);
+        }
+    });
+    
     return card;
+}
+
+// Function to position hover panel based on card position
+function positionHoverPanel(card, panel) {
+    const rect = card.getBoundingClientRect();
+    const modalRect = card.closest('.category-modal-content')?.getBoundingClientRect() || 
+                     document.body.getBoundingClientRect();
+    
+    // Check if card is on right side of modal
+    const cardCenterX = rect.left + (rect.width / 2);
+    const modalCenterX = modalRect.left + (modalRect.width / 2);
+    
+    // Remove all position classes
+    panel.classList.remove('hover-left', 'hover-right');
+    
+    // If card is on right half, show panel on left
+    if (cardCenterX > modalCenterX) {
+        panel.classList.add('hover-left');
+    } else {
+        // Otherwise show on right (default)
+        panel.classList.add('hover-right');
+    }
+}
+
+function getProductRecommendations(product) {
+    let recommendations = '<div class="recommendations-grid">';
+    
+    // Only show recommendations for components that need partners
+    const componentTypes = ['cpus', 'motherboards', 'ram', 'gpus', 'storage', 'psus', 'cases', 'cooling'];
+    const isComponent = componentTypes.some(type => 
+        products[type]?.some(p => p.id === product.id)
+    );
+    
+    if (!isComponent) {
+        return ''; // No recommendations for non-components
+    }
+    
+    // Motherboard recommendations
+    if (product.chipset && product.socket) {
+        // Find 2-3 compatible CPUs
+        const compatibleCPUs = products.cpus?.filter(cpu => 
+            cpu.socket === product.socket
+        ).slice(0, 2) || [];
+        
+        if (compatibleCPUs.length > 0) {
+            recommendations += `
+                <div class="recommendation-category">
+                    <strong>Best CPUs:</strong>
+                    <ul>
+                        ${compatibleCPUs.map(cpu => 
+                            `<li>${cpu.name.split(' ').slice(0, 3).join(' ')} - ${formatPrice(cpu.price)}</li>`
+                        ).join('')}
+                    </ul>
+                </div>
+            `;
+        }
+    }
+    
+    // RAM recommendations for motherboards
+    if (product.ramType) {
+        const compatibleRAM = products.ram?.filter(ram => 
+            ram.type === product.ramType
+        ).slice(0, 2) || [];
+        
+        if (compatibleRAM.length > 0) {
+            recommendations += `
+                <div class="recommendation-category">
+                    <strong>Best RAM:</strong>
+                    <ul>
+                        ${compatibleRAM.map(ram => 
+                            `<li>${ram.name.split(' ').slice(0, 2).join(' ')} - ${formatPrice(ram.price)}</li>`
+                        ).join('')}
+                    </ul>
+                </div>
+            `;
+        }
+    }
+    
+    // GPU recommendations for CPUs
+    if (product.socket && product.price > 15000) {
+        recommendations += `
+            <div class="recommendation-category">
+                <strong>High-end GPU:</strong>
+                <ul>
+                    <li>RTX 4070 Ti or better</li>
+                    <li>850W+ PSU recommended</li>
+                </ul>
+            </div>
+        `;
+    }
+    
+    // Case recommendations for motherboards
+    if (product.formFactor) {
+        recommendations += `
+            <div class="recommendation-category">
+                <strong>Case Compatibility:</strong>
+                <ul>
+                    <li>Fits ${product.formFactor} & larger cases</li>
+                    <li>Check case specifications</li>
+                </ul>
+            </div>
+        `;
+    }
+    
+    if (recommendations === '<div class="recommendations-grid">') {
+        return '';
+    }
+    
+    recommendations += '</div>';
+    return recommendations;
+}
+
+function formatSpecificationsForHover(product) {
+    if (!product.specs) return '<p>No specifications available</p>';
+    
+    // If specs are comma-separated, convert to list
+    if (product.specs.includes(',')) {
+        const specItems = product.specs.split(',').map(item => item.trim());
+        return `<ul>${specItems.map(item => `<li>${item}</li>`).join('')}</ul>`;
+    }
+    return `<p>${product.specs}</p>`;
+}
+
+function setupHoverPositioning() {
+    // Reposition panels on window resize
+    window.addEventListener('resize', function() {
+        document.querySelectorAll('.modal-product-card').forEach(card => {
+            const panel = card.querySelector('.hover-details-panel');
+            if (panel && card.matches(':hover')) {
+                positionHoverPanel(card, panel);
+            }
+        });
+    });
+    
+    // Also reposition when modal is scrolled
+    const modalContent = document.querySelector('.category-modal-content');
+    if (modalContent) {
+        modalContent.addEventListener('scroll', function() {
+            document.querySelectorAll('.modal-product-card').forEach(card => {
+                const panel = card.querySelector('.hover-details-panel');
+                if (panel && card.matches(':hover')) {
+                    positionHoverPanel(card, panel);
+                }
+            });
+        });
+    }
 }
 
 function closeCategoryModal() {
@@ -320,10 +523,55 @@ function closeCategoryModal() {
     }
 }
 
+// Utility functions
+function truncateText(text, length) {
+    if (!text) return 'No description';
+    if (text.length <= length) return text;
+    return text.substring(0, length) + '...';
+}
+
+function formatSpecifications(specs) {
+    if (!specs) return '<div class="spec-item">No specifications available</div>';
+    
+    // If specs are comma-separated, convert to list
+    if (specs.includes(',')) {
+        const specItems = specs.split(',').map(item => item.trim());
+        return specItems.map(item => `<div class="spec-item">${item}</div>`).join('');
+    }
+    return `<div class="spec-item">${specs}</div>`;
+}
+
+function getProductById(productId) {
+    console.log('getProductById searching for:', productId);
+    for (const category in products) {
+        const product = products[category].find(p => p.id === productId);
+        if (product) {
+            console.log('Found in category:', category);
+            return product;
+        }
+    }
+    console.log('Product not found in any category');
+    return null;
+}
+
+function formatPrice(price) {
+    if (typeof price === 'number') {
+        return '₱' + price.toLocaleString('en-PH');
+    }
+    return '₱0.00';
+}
+
+function getFeaturedProducts() {
+    const featured = [];
+    if (products.prebuilts) featured.push(...products.prebuilts.slice(0, 3));
+    if (products.laptops) featured.push(...products.laptops.slice(0, 3));
+    return featured;
+}
+
 // Close modal when clicking outside
 document.addEventListener('click', function(event) {
-    const modal = document.getElementById('category-modal');
-    if (event.target === modal) {
+    const categoryModal = document.getElementById('category-modal');
+    if (event.target === categoryModal) {
         closeCategoryModal();
     }
 });
@@ -335,58 +583,12 @@ document.addEventListener('keydown', function(event) {
     }
 });
 
-// Utility function to get product by ID
-function getProductById(productId) {
-    for (const category in products) {
-        const product = products[category].find(p => p.id === productId);
-        if (product) return product;
-    }
-    return null;
-}
+// Export functions to global scope
+window.addToCart = addToCart;
+window.closeCategoryModal = closeCategoryModal;
 
-// Get featured products for homepage
-function getFeaturedProducts() {
-    const featured = [];
-    // Take 3 prebuilts and 3 laptops
-    if (products.prebuilts) featured.push(...products.prebuilts.slice(0, 3));
-    if (products.laptops) featured.push(...products.laptops.slice(0, 3));
-    return featured;
-}
-// Debug function to show what's happening
-function showDebugInfo(message) {
-    const debugEl = document.getElementById('debug-info');
-    if (debugEl) {
-        debugEl.style.display = 'block';
-        debugEl.innerHTML = message + '<br>' + new Date().toLocaleTimeString();
-    }
-    console.log('DEBUG:', message);
-}
-
-// Update the initializeApp to show debug info
-function initializeApp() {
-    showDebugInfo('App Initializing...');
-    
-    // Simulate loading screen
-    setTimeout(() => {
-        document.getElementById('loading-screen').style.opacity = '0';
-        setTimeout(() => {
-            document.getElementById('loading-screen').style.display = 'none';
-            showDebugInfo('Loading Complete - App Ready');
-        }, 500);
-    }, 3000);
-
-    // Load featured products
-    loadFeaturedProducts();
-    
-    // Initialize cart count
-    updateCartCount();
-    
-    // Initialize category interactions
-    initializeCategories();
-    
-    // Initialize navigation dropdown
-    initializeNavigation();
-    
-    // Test if products are loaded
-    showDebugInfo(`Products Loaded: ${Object.keys(products).length} categories`);
-}
+console.log('Functions exported to window');
+console.log('Script.js loaded successfully');
+console.log('Available window functions:');
+console.log('- window.addToCart:', typeof window.addToCart);
+console.log('- window.closeCategoryModal:', typeof window.closeCategoryModal);
