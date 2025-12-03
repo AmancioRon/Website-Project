@@ -330,59 +330,180 @@ body {
     gap: 1rem;
 }
 
-.btn {
-    padding: 1rem 2rem;
-    border: none;
-    border-radius: 5px;
-    font-size: 1.1rem;
-    font-weight: 600;
-    text-decoration: none;
-    text-align: center;
-    transition: all 0.3s ease;
-    cursor: pointer;
-    font-family: 'Exo 2', sans-serif;
-}
-
-.btn-primary {
-    background: var(--gradient-primary);
-    color: var(--dark);
-}
-
-.btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--glow-primary);
-}
-
-.btn-secondary {
-    background: transparent;
-    color: var(--primary);
-    border: 2px solid var(--primary);
-}
-
-.btn-secondary:hover {
-    background: var(--primary);
-    color: var(--dark);
+.hero-visual {
+    position: relative;
+    height: 450px;
 }
 
 .floating-components {
     position: relative;
-    height: 400px;
+    width: 100%;
+    height: 100%;
 }
 
 .component {
     position: absolute;
-    width: 96px;
-    height: 96px;
+    width: 110px;
+    height: 110px;
     animation: float 3s ease-in-out infinite;
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 2;
 }
 
 .component img {
     width: 100%;
     height: 100%;
     object-fit: contain;
+    filter: drop-shadow(0 5px 15px rgba(0, 240, 255, 0.3));
+    transition: all 0.3s ease;
+}
+
+/* Hover effect */
+.component:hover img {
+    transform: scale(1.1);
+    filter: drop-shadow(0 10px 25px rgba(0, 240, 255, 0.6));
+}
+
+/* Tooltip styling */
+.component::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: var(--primary);
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 10;
+    border: 1px solid var(--primary);
+}
+
+.component:hover::after {
+    opacity: 1;
+    visibility: visible;
+    bottom: -35px;
+}
+
+/* Position each component */
+.component.cpu { 
+    top: 20%; 
+    left: 20%; 
+    animation-delay: 0s; 
+}
+
+.component.gpu { 
+    top: 10%; 
+    right: 20%; 
+    animation-delay: 1s; 
+}
+
+.component.mb { 
+    bottom: 25%; 
+    left: 15%; 
+    animation-delay: 2s; 
+}
+
+.component.ram { 
+    bottom: 20%; 
+    right: 25%; 
+    animation-delay: 1.5s; 
+}
+
+@keyframes float {
+    0%, 100% { 
+        transform: translateY(0) rotate(0deg);
+    }
+    50% { 
+        transform: translateY(-20px) rotate(5deg);
+    }
+}
+
+/* Add glowing effect */
+.component::before {
+    content: '';
+    position: absolute;
+    width: 120%;
+    height: 120%;
+    background: radial-gradient(circle, rgba(0, 240, 255, 0.1) 0%, transparent 70%);
+    border-radius: 50%;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.component:hover::before {
+    opacity: 1;
+}
+
+/* Add background effect to hero visual */
+.hero-visual::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    height: 80%;
+    background: radial-gradient(circle, rgba(0, 240, 255, 0.05) 0%, transparent 70%);
+    border-radius: 50%;
+    z-index: 1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .hero-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 2rem;
+    }
+    
+    .hero-text h1 {
+        font-size: 2.5rem;
+    }
+    
+    .hero-visual {
+        height: 300px;
+        order: -1;
+    }
+    
+    .component {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .component.cpu { 
+        top: 20%; 
+        left: 10%; 
+    }
+    
+    .component.gpu { 
+        top: 10%; 
+        right: 10%; 
+    }
+    
+    .component.mb { 
+        bottom: 25%; 
+        left: 5%; 
+    }
+    
+    .component.ram { 
+        bottom: 20%; 
+        right: 15%; 
+    }
+    
+    .component::after {
+        font-size: 0.7rem;
+        padding: 5px 8px;
+        bottom: -30px;
+    }
 }
 
 .component.cpu { top: 20%; left: 20%; animation-delay: 0s; }
