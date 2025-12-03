@@ -44,11 +44,44 @@
                     <button class="tab-btn active" onclick="openTab('inventory')">Inventory</button>
                     <button class="tab-btn" onclick="openTab('orders')">Orders</button>
                     <button class="tab-btn" onclick="openTab('add-product')">Add Product</button>
+                    <button class="tab-btn" onclick="openTab('stats')">Statistics</button>
                 </div>
 
                 <!-- Inventory Tab -->
                 <div id="inventory" class="tab-content active">
                     <h3>Product Inventory</h3>
+                    <div class="inventory-stats">
+                        <div class="stat-card">
+                            <h4>Total Products</h4>
+                            <p id="total-products">0</p>
+                        </div>
+                        <div class="stat-card">
+                            <h4>Total Value</h4>
+                            <p id="total-value">₱0.00</p>
+                        </div>
+                        <div class="stat-card">
+                            <h4>Categories</h4>
+                            <p id="total-categories">0</p>
+                        </div>
+                    </div>
+                    <div class="inventory-controls">
+                        <input type="text" id="search-inventory" placeholder="Search products..." class="search-input" onkeyup="searchInventory()">
+                        <select id="filter-category" onchange="filterInventory()" class="filter-select">
+                            <option value="">All Categories</option>
+                            <option value="motherboards">Motherboards</option>
+                            <option value="prebuilts">Prebuilt PCs</option>
+                            <option value="laptops">Laptops</option>
+                            <option value="cpus">CPUs</option>
+                            <option value="ram">RAM</option>
+                            <option value="gpus">GPUs</option>
+                            <option value="storage">Storage</option>
+                            <option value="psus">Power Supplies</option>
+                            <option value="cases">Cases</option>
+                            <option value="cooling">Cooling</option>
+                            <option value="monitors">Monitors</option>
+                            <option value="peripherals">Peripherals</option>
+                        </select>
+                    </div>
                     <div class="inventory-grid" id="inventory-grid">
                         <!-- Inventory items loaded by JavaScript -->
                     </div>
@@ -57,6 +90,10 @@
                 <!-- Orders Tab -->
                 <div id="orders" class="tab-content">
                     <h3>Recent Orders</h3>
+                    <div class="orders-header">
+                        <h4>Order History</h4>
+                        <button onclick="clearOrders()" class="btn btn-small btn-danger">Clear All Orders</button>
+                    </div>
                     <div class="orders-list" id="orders-list">
                         <!-- Orders will be listed here -->
                     </div>
@@ -66,29 +103,68 @@
                 <div id="add-product" class="tab-content">
                     <h3>Add New Product</h3>
                     <form class="product-form" onsubmit="addProduct(event)">
-                        <input type="text" id="product-name" placeholder="Product Name" required>
-                        <input type="number" id="product-price" placeholder="Price" step="0.01" required>
-                        <select id="product-category" required>
+                        <div class="form-row">
+                            <input type="text" id="product-name" placeholder="Product Name" required>
+                            <input type="number" id="product-price" placeholder="Price" step="0.01" min="0" required>
+                        </div>
+                        
+                        <select id="product-category" required onchange="updateSpecFields()">
                             <option value="">Select Category</option>
-                            <option value="cpus">CPUs</option>
                             <option value="motherboards">Motherboards</option>
+                            <option value="prebuilts">Prebuilt PCs</option>
+                            <option value="laptops">Laptops</option>
+                            <option value="cpus">CPUs</option>
                             <option value="ram">RAM</option>
                             <option value="gpus">GPUs</option>
                             <option value="storage">Storage</option>
                             <option value="psus">Power Supplies</option>
                             <option value="cases">Cases</option>
+                            <option value="cooling">Cooling</option>
                             <option value="monitors">Monitors</option>
                             <option value="peripherals">Peripherals</option>
                         </select>
-                        <textarea id="product-specs" placeholder="Specifications" required></textarea>
-                        <input type="text" id="product-image" placeholder="Image Emoji" value="📦">
-                        <button type="submit" class="btn btn-primary">Add Product</button>
+                        
+                        <div class="form-row">
+                            <input type="text" id="product-image" placeholder="Image URL" required>
+                            <button type="button" class="btn btn-small" onclick="testImage()">Test Image</button>
+                        </div>
+                        
+                        <div id="spec-fields">
+                            <!-- Dynamic specification fields will appear here -->
+                        </div>
+                        
+                        <textarea id="product-specs" placeholder="Main Specifications (comma separated)" required></textarea>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Add Product</button>
+                            <button type="reset" class="btn btn-secondary">Clear Form</button>
+                        </div>
                     </form>
+                </div>
+
+                <!-- Statistics Tab -->
+                <div id="stats" class="tab-content">
+                    <h3>Store Statistics</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card large">
+                            <h4>Inventory Summary</h4>
+                            <div class="category-breakdown" id="category-breakdown">
+                                <!-- Category breakdown will be loaded here -->
+                            </div>
+                        </div>
+                        <div class="stat-card large">
+                            <h4>Top Products by Price</h4>
+                            <div class="top-products" id="top-products">
+                                <!-- Top products will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
     </div>
 
+    <script src="products-data.js"></script>
     <script src="admin.js"></script>
 </body>
 </html>

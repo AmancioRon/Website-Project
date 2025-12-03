@@ -9,6 +9,12 @@ document.addEventListener('DOMContentLoaded', function() {
 function initializeApp() {
     console.log('Initializing app...');
     
+    // Show customer name modal if not set
+    setTimeout(() => {
+        showCustomerModal();
+        updateCurrentNameDisplay();
+    }, 500);
+    
     // Simulate loading screen
     setTimeout(() => {
         if (document.getElementById('loading-screen')) {
@@ -31,43 +37,108 @@ function initializeApp() {
     // Initialize navigation dropdown
     initializeNavigation();
     
-    // Fix hero buttons immediately
+    // Fix hero buttons immediately - SIMPLIFIED DIRECT FIX
     fixHeroButtons();
     
     console.log('SynapseSparks initialized successfully!');
 }
 
-// FIX HERO BUTTONS
+// CUSTOMER NAME FUNCTIONS
+function showCustomerModal() {
+    // Check if customer name already exists
+    const existingName = localStorage.getItem('customerName');
+    if (!existingName) {
+        const modal = document.getElementById('customer-modal');
+        if (modal) {
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+    }
+}
+
+function saveCustomerName() {
+    const nameInput = document.getElementById('customer-name');
+    const name = nameInput.value.trim();
+    
+    if (name) {
+        localStorage.setItem('customerName', name);
+        closeCustomerModal();
+        updateCurrentNameDisplay();
+    } else {
+        alert('Please enter your name to continue.');
+    }
+}
+
+function closeCustomerModal() {
+    const modal = document.getElementById('customer-modal');
+    if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+}
+
+function getCustomerName() {
+    return localStorage.getItem('customerName') || 'Guest Customer';
+}
+
+function changeCustomerName() {
+    const newName = prompt('Enter your new name:', getCustomerName());
+    if (newName && newName.trim()) {
+        localStorage.setItem('customerName', newName.trim());
+        alert('Name updated successfully!');
+        updateCurrentNameDisplay();
+    }
+}
+
+function updateCurrentNameDisplay() {
+    const currentNameElement = document.getElementById('current-name');
+    if (currentNameElement) {
+        currentNameElement.textContent = getCustomerName();
+    }
+}
+
+// FIX HERO BUTTONS - ULTRA SIMPLE FIX
 function fixHeroButtons() {
     console.log('Fixing hero buttons...');
     
-    // Fix Start Building button
-    const startBuildingBtn = document.querySelector('.hero-buttons .btn-primary');
-    if (startBuildingBtn && startBuildingBtn.tagName === 'A') {
-        console.log('Found Start Building button');
-        startBuildingBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            console.log('Start Building clicked, redirecting to build-pc.html');
-            window.location.href = 'build-pc.html';
-        });
-    }
-    
-    // Fix Explore Products button
-    const exploreBtn = document.querySelector('.explore-products-btn');
-    if (exploreBtn) {
-        console.log('Found Explore Products button');
-        exploreBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            console.log('Explore Products clicked');
-            const categories = document.getElementById('categories');
-            if (categories) {
-                categories.scrollIntoView({ 
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            }
-        });
-    }
+    // Wait a bit for everything to load
+    setTimeout(() => {
+        // DIRECT FIX: Add event listeners to existing buttons
+        const startBuildingBtn = document.querySelector('.hero-buttons .btn-primary');
+        const exploreBtn = document.querySelector('.hero-buttons .btn-secondary');
+        
+        if (startBuildingBtn) {
+            console.log('Fixing Start Building button');
+            // Remove any href and add click handler
+            startBuildingBtn.href = 'javascript:void(0)';
+            startBuildingBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('Start Building clicked');
+                window.location.href = 'build-pc.html';
+            });
+            startBuildingBtn.style.cursor = 'pointer';
+        }
+        
+        if (exploreBtn) {
+            console.log('Fixing Explore Products button');
+            // Remove any href and add click handler
+            exploreBtn.href = 'javascript:void(0)';
+            exploreBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('Explore Products clicked');
+                const categoriesSection = document.querySelector('.categories');
+                if (categoriesSection) {
+                    categoriesSection.scrollIntoView({ 
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+            exploreBtn.style.cursor = 'pointer';
+        }
+        
+        console.log('Hero buttons fixed');
+    }, 100);
 }
 
 function loadFeaturedProducts() {
@@ -571,24 +642,81 @@ function getFeaturedProducts() {
 // Close modal when clicking outside
 document.addEventListener('click', function(event) {
     const categoryModal = document.getElementById('category-modal');
+    const customerModal = document.getElementById('customer-modal');
+    
     if (event.target === categoryModal) {
         closeCategoryModal();
+    }
+    
+    if (event.target === customerModal) {
+        closeCustomerModal();
     }
 });
 
 // Close modal with Escape key
 document.addEventListener('keydown', function(event) {
     if (event.key === 'Escape') {
-        closeCategoryModal();
+        const categoryModal = document.getElementById('category-modal');
+        const customerModal = document.getElementById('customer-modal');
+        
+        if (categoryModal && categoryModal.style.display === 'block') {
+            closeCategoryModal();
+        }
+        
+        if (customerModal && customerModal.style.display === 'block') {
+            closeCustomerModal();
+        }
     }
 });
+
+// EMERGENCY FIX - Add direct event listeners to buttons
+function emergencyButtonFix() {
+    console.log('Running emergency button fix...');
+    
+    const startBtn = document.querySelector('.hero-buttons .btn-primary');
+    const exploreBtn = document.querySelector('.hero-buttons .btn-secondary');
+    
+    if (startBtn) {
+        console.log('Emergency fixing Start Building button');
+        // Completely replace the button
+        const newStartBtn = document.createElement('button');
+        newStartBtn.className = startBtn.className;
+        newStartBtn.textContent = startBtn.textContent;
+        newStartBtn.style.cssText = startBtn.style.cssText;
+        newStartBtn.onclick = function() {
+            window.location.href = 'build-pc.html';
+        };
+        startBtn.parentNode.replaceChild(newStartBtn, startBtn);
+    }
+    
+    if (exploreBtn) {
+        console.log('Emergency fixing Explore Products button');
+        // Completely replace the button
+        const newExploreBtn = document.createElement('button');
+        newExploreBtn.className = exploreBtn.className;
+        newExploreBtn.textContent = exploreBtn.textContent;
+        newExploreBtn.style.cssText = exploreBtn.style.cssText;
+        newExploreBtn.onclick = function() {
+            const categoriesSection = document.querySelector('.categories');
+            if (categoriesSection) {
+                categoriesSection.scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        };
+        exploreBtn.parentNode.replaceChild(newExploreBtn, exploreBtn);
+    }
+}
+
+// Run emergency fix after page loads
+setTimeout(emergencyButtonFix, 1500);
 
 // Export functions to global scope
 window.addToCart = addToCart;
 window.closeCategoryModal = closeCategoryModal;
+window.changeCustomerName = changeCustomerName;
+window.emergencyButtonFix = emergencyButtonFix;
 
 console.log('Functions exported to window');
 console.log('Script.js loaded successfully');
-console.log('Available window functions:');
-console.log('- window.addToCart:', typeof window.addToCart);
-console.log('- window.closeCategoryModal:', typeof window.closeCategoryModal);

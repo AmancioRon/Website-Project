@@ -8,6 +8,19 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Customer Name Modal -->
+    <div id="customer-modal" class="modal">
+        <div class="modal-content customer-modal-content">
+            <div class="customer-modal">
+                <h2>Welcome to SynapseSparks!</h2>
+                <p>Please enter your name to continue shopping:</p>
+                <input type="text" id="customer-name" placeholder="Enter your name" class="customer-input">
+                <button onclick="saveCustomerName()" class="btn btn-primary">Start Shopping</button>
+                <p class="customer-note">Your name will be used for order receipts.</p>
+            </div>
+        </div>
+    </div>
+
     <!-- Loading Screen -->
     <div id="loading-screen" class="loading-screen">
         <div class="loading-content">
@@ -20,7 +33,7 @@
                 </div>
                 <h1>SYNAPSE<span>SPARKS</span></h1>
             </div>
-            <p>Igniting Your Digital Future</p>
+            <p>Your Trusted PC Partner.</p>
             <div class="loading-bar">
                 <div class="loading-progress"></div>
             </div>
@@ -63,29 +76,28 @@
         <div class="hero-content">
             <div class="hero-text">
                 <h1 class="glitch-text" data-text="WELCOME TO SYNAPSE SPARKS">WELCOME TO SYNAPSE SPARKS</h1>
-                <p class="hero-description">Where cutting-edge technology meets limitless possibilities. Build, create, and transform your digital experience with our premium components and systems.</p>
-                <div class="hero-buttons">
-    <a href="build-pc.html" class="btn btn-primary">Start Building</a>
-    <a href="#categories" class="btn btn-secondary explore-products-btn">Explore Products</a>
+                <p class="hero-description">Your trusted small-scale PC shop for reliable components, custom builds, and honest recommendations. Helping you upgrade your setup, one part at a time.</p>
+              <div class="hero-buttons">
+    <a href="build-pc.html" class="btn btn-primary" onclick="window.location.href='build-pc.html'; return false;">Start Building</a>
+    <a href="#categories" class="btn btn-secondary explore-products-btn" onclick="document.getElementById('categories').scrollIntoView({behavior:'smooth'}); return false;">Explore Products</a>
 </div>
             </div>
             <div class="hero-visual">
-    <div class="floating-components">
-        <div class="component cpu" data-tooltip="Latest CPUs">
-            <img src="https://pngimg.com/d/cpu_PNG40.png" alt="CPU">
-        </div>
-        <div class="component gpu" data-tooltip="Powerful GPUs">
-            <img src="https://png.pngtree.com/png-vector/20250516/ourmid/pngtree-nvidia-rtx-3080-rog-strix-triple-fan-gpu-with-rgb-lighting-png-image_16297274.png" alt="GPU">
-        </div>
-        <div class="component mb" data-tooltip="Motherboards">
-            <img src="https://pngimg.com/d/motherboard_PNG3.png" alt="Motherboard">
-        </div>
-        <div class="component ram" data-tooltip="High-Speed RAM">
-            <img src="https://www.gskill.com/_upload/htmlEdit/01_4266_4x8gb_title%5B1%5D(1).png" alt="RAM">
-        </div>
-        
-    </div>
-</div>
+                <div class="floating-components">
+                    <div class="component cpu" data-tooltip="Latest CPUs">
+                        <img src="https://pngimg.com/d/cpu_PNG40.png" alt="CPU">
+                    </div>
+                    <div class="component gpu" data-tooltip="Powerful GPUs">
+                        <img src="https://png.pngtree.com/png-vector/20250516/ourmid/pngtree-nvidia-rtx-3080-rog-strix-triple-fan-gpu-with-rgb-lighting-png-image_16297274.png" alt="GPU">
+                    </div>
+                    <div class="component mb" data-tooltip="Motherboards">
+                        <img src="https://pngimg.com/d/motherboard_PNG3.png" alt="Motherboard">
+                    </div>
+                    <div class="component ram" data-tooltip="High-Speed RAM">
+                        <img src="https://www.gskill.com/_upload/htmlEdit/01_4266_4x8gb_title%5B1%5D(1).png" alt="RAM">
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -129,7 +141,6 @@
                 <p>Custom build your dream PC</p>
                 <div class="category-hover"></div>
             </div>
-            
         </div>
     </section>
 
@@ -153,27 +164,28 @@
             </div>
             <div class="footer-section">
                 <h4>Contact Us</h4>
-                <a href="https://www.facebook.com/profile.php?id=61582661370168" class="footer-link">Facebook Page</a>
+                <a href="https://www.facebook.com/profile.php?id=61582661370168" target="_blank" class="footer-link">Facebook Page</a>
                 <p>Email: contact@synapsesparks.com</p>
+                <p>Customer: <span id="current-name">Guest</span> | <a href="#" onclick="changeCustomerName()" class="footer-link">Change</a></p>
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2025 SynapseSparks. All rights reserved.</p>
+            <p>&copy; 2024 SynapseSparks. All rights reserved.</p>
         </div>
     </footer>
 
     <script src="products-data.js"></script>
     <script src="script.js"></script>
 
-    <<!-- Category Products Modal -->
-<div id="category-modal" class="modal">
-    <div class="modal-content category-modal-content">
-        <span class="close" onclick="closeCategoryModal()" title="Close">&times;</span>
-        <h2 id="modal-category-title">Category Products</h2>
-        <div class="category-products-grid" id="category-products-grid">
-            <!-- Products will be loaded here with hover panels -->
+    <!-- Category Products Modal -->
+    <div id="category-modal" class="modal">
+        <div class="modal-content category-modal-content">
+            <span class="close" onclick="closeCategoryModal()" title="Close">&times;</span>
+            <h2 id="modal-category-title">Category Products</h2>
+            <div class="category-products-grid" id="category-products-grid">
+                <!-- Products will be loaded here -->
+            </div>
         </div>
     </div>
-</div>
 </body>
 </html>

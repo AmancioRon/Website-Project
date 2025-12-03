@@ -38,7 +38,7 @@ function loadCart() {
 }
 
 function updateSummary(subtotal) {
-    const tax = subtotal * 0.08; // 8% tax
+    const tax = subtotal * 0.03; // 3% tax
     const total = subtotal + tax;
 
     document.getElementById('subtotal').textContent = formatPrice(subtotal);
@@ -76,10 +76,15 @@ function generateReceipt() {
     const receipt = document.getElementById('receipt-content');
     let subtotal = 0;
 
+    // Get customer name from localStorage
+    const customerName = localStorage.getItem('customerName') || 'Guest Customer';
+
     let receiptHTML = `
         <div class="receipt-header">
             <h3>SYNAPSE SPARKS</h3>
             <p>Order Date: ${new Date().toLocaleDateString()}</p>
+            <p>Order Time: ${new Date().toLocaleTimeString()}</p>
+            <p>Customer: <strong>${customerName}</strong></p>
         </div>
         <div class="receipt-items">
     `;
@@ -94,7 +99,7 @@ function generateReceipt() {
         subtotal += item.price;
     });
 
-    const tax = subtotal * 0.08;
+    const tax = subtotal * 0.03; // 3% tax
     const total = subtotal + tax;
 
     receiptHTML += `
@@ -105,7 +110,7 @@ function generateReceipt() {
                 <span class="price-formatted">${formatPrice(subtotal)}</span>
             </div>
             <div class="receipt-line">
-                <span>Tax (8%):</span>
+                <span>Tax (3%):</span>
                 <span class="price-formatted">${formatPrice(tax)}</span>
             </div>
             <div class="receipt-line total">
@@ -114,8 +119,9 @@ function generateReceipt() {
             </div>
         </div>
         <div class="customer-info">
-            <p><strong>Customer Name:</strong> <span contenteditable="true">Guest Customer</span></p>
-            <p><strong>Contact Info:</strong> <span contenteditable="true">Email or Phone</span></p>
+            <p><strong>Thank you for your order, ${customerName}!</strong></p>
+            <p>Please save or screenshot this receipt.</p>
+            <p>Visit our Facebook page for inquiries: <a href="https://www.facebook.com/profile.php?id=61582661370168" target="_blank" style="color: var(--primary);">SynapseSparks Facebook</a></p>
         </div>
     `;
 
@@ -123,13 +129,21 @@ function generateReceipt() {
 }
 
 function sendToFacebook() {
-    const customerName = document.querySelector('.customer-info span:nth-child(1)').textContent;
-    const contactInfo = document.querySelector('.customer-info span:nth-child(2)').textContent;
-    const total = document.querySelector('.receipt-totals .total span:last-child').textContent;
-
-    const message = `New Order from ${customerName}!\nContact: ${contactInfo}\nTotal: ${total}\n\nPlease check the full order details.`;
+    const customerName = localStorage.getItem('customerName') || 'Guest Customer';
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
     
-    // Open Facebook page with pre-filled message
+    let itemsText = '';
+    cart.forEach(item => {
+        itemsText += `• ${item.name} - ${formatPrice(item.price)}\n`;
+    });
+    
+    let subtotal = cart.reduce((sum, item) => sum + item.price, 0);
+    let tax = subtotal * 0.03;
+    let total = subtotal + tax;
+    
+    const message = `New Order from ${customerName}!\n\nItems:\n${itemsText}\nSubtotal: ${formatPrice(subtotal)}\nTax (3%): ${formatPrice(tax)}\nTotal: ${formatPrice(total)}`;
+    
+    // Open YOUR Facebook page
     const facebookUrl = `https://www.facebook.com/profile.php?id=61582661370168`;
     window.open(facebookUrl, '_blank');
     
@@ -138,14 +152,6 @@ function sendToFacebook() {
 
 function closeModal() {
     document.getElementById('checkout-modal').style.display = 'none';
-}
-
-// Close modal when clicking outside
-window.onclick = function(event) {
-    const modal = document.getElementById('checkout-modal');
-    if (event.target === modal) {
-        closeModal();
-    }
 }
 
 // PRICE FORMATTING FUNCTION
@@ -158,3 +164,44 @@ function formatPrice(price) {
 
 // Initialize cart when page loads
 document.addEventListener('DOMContentLoaded', loadCart);
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+    const modal = document.getElementById('checkout-modal');
+    if (event.target === modal) {
+        closeModal();
+    }
+}
+function checkout() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    if (cart.length === 0) {
+        alert('Your cart is empty!');
+        return;
+    }
+
+    // Calculate totals
+    let subtotal = cart.reduce((sum, item) => sum + item.price, 0);
+    let tax = subtotal * 0.03;
+    let total = subtotal + tax;
+    let customerName = localStorage.getItem('customerName') || 'Guest Customer';
+    
+    // Capture order for admin panel
+    if (typeof captureOrder === 'function') {
+        captureOrder(cart, customerName, subtotal, tax, total);
+    } else {
+        // Fallback: Save to localStorage
+        let orders = JSON.parse(localStorage.getItem('adminOrders')) || [];
+        orders.push({
+            date: new Date().toLocaleString(),
+            customerName: customerName,
+            items: cart,
+            subtotal: subtotal,
+            tax: tax,
+            total: total
+        });
+        localStorage.setItem('adminOrders', JSON.stringify(orders));
+    }
+    
+    generateReceipt();
+    document.getElementById('checkout-modal').style.display = 'block';
+}
